@@ -9,7 +9,7 @@ May need to modify before fit into abides
 """
 
 
-class ExampleExperimentalAgentTemplate(SubscriptionAgent):
+class TestAgentTemplate(SubscriptionAgent):
     """ Minimal working template for an experimental trading agent
     """
     def __init__(self, id, name, type, symbol, starting_cash, levels, subscription_freq, log_orders=False, random_state=None):
@@ -74,9 +74,7 @@ class ExampleExperimentalAgentTemplate(SubscriptionAgent):
         for _, order in self.orders.items():
             self.cancelOrder(order)
 
-
-
-class ExampleExperimentalAgent(ExampleExperimentalAgentTemplate):
+class ExampleExperimentalAgent(TestAgentTemplate):
 
     def __init__(self, *args, wake_freq, order_size, short_window, long_window, **kwargs):
         """

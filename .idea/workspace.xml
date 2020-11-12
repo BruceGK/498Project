@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="233b4340-4603-4815-a69e-2fad44333cd8" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/agents/TestAgents.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/abides/agent/examples/ExampleExperimentalAgent.py" beforeDir="false" afterPath="$PROJECT_DIR$/abides/agent/examples/ExampleExperimentalAgent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/TestAgents.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/TestAgents.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,11 +13,27 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ImpactAgent.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/abides/agent/examples/ImpactAgent.py">
+      <file leaf-file-name="TestAgents.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/agents/TestAgents.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="466">
-              <caret line="63" column="13" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="13" />
+            <state relative-caret-position="2100">
+              <caret line="140" column="25" lean-forward="true" selection-start-line="140" selection-start-column="25" selection-end-line="140" selection-end-column="25" />
+              <folding>
+                <element signature="e#0#69#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="simple_agent.cfg" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/agents/simple_agent.cfg">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name="Agent.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/agents/Agent.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-72">
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
               </folding>
@@ -26,48 +41,26 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Agent.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/abides/agent/Agent.py">
+      <file leaf-file-name="valuations.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/valuations.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-117">
+            <state relative-caret-position="626">
+              <caret line="77" column="16" lean-forward="true" selection-start-line="77" selection-start-column="16" selection-end-line="77" selection-end-column="16" />
               <folding>
-                <element signature="e#0#19#0" expanded="true" />
+                <element signature="e#0#29#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="exp_agent_demo.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/abides/config/exp_agent_demo.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-448">
-              <caret line="164" column="12" selection-start-line="164" selection-start-column="12" selection-end-line="164" selection-end-column="12" />
-            </state>
-          </provider>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/agents/__init__.py">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file leaf-file-name="ExampleExperimentalAgent.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/abides/agent/examples/ExampleExperimentalAgent.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="741">
-              <caret line="69" lean-forward="true" selection-start-line="5" selection-end-line="69" />
-              <folding>
-                <element signature="e#0#69#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TestAgents.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/agents/TestAgents.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="24" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="24" />
-              <folding>
-                <element signature="e#0#69#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
+      <file leaf-file-name="util.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/agents/util.py">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
@@ -111,24 +104,6 @@
             <path>
               <item name="498Project" type="b2602c69:ProjectViewProjectNode" />
               <item name="498Project" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="498Project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="498Project" type="462c0819:PsiDirectoryNode" />
-              <item name="abides" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="498Project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="498Project" type="462c0819:PsiDirectoryNode" />
-              <item name="abides" type="462c0819:PsiDirectoryNode" />
-              <item name="agent" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="498Project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="498Project" type="462c0819:PsiDirectoryNode" />
-              <item name="abides" type="462c0819:PsiDirectoryNode" />
-              <item name="agent" type="462c0819:PsiDirectoryNode" />
-              <item name="examples" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="498Project" type="b2602c69:ProjectViewProjectNode" />
@@ -253,15 +228,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agents/Agent.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-28">
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/abides/agent/examples/ExampleExperimentalAgent.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="741">
@@ -272,10 +238,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/agents/simple_agent.cfg">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agents/util.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agents/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agents/Agent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-72">
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/valuations.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="626">
+          <caret line="77" column="16" lean-forward="true" selection-start-line="77" selection-start-column="16" selection-end-line="77" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/agents/TestAgents.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="24" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="24" />
+        <state relative-caret-position="2100">
+          <caret line="140" column="25" lean-forward="true" selection-start-line="140" selection-start-column="25" selection-end-line="140" selection-end-column="25" />
           <folding>
             <element signature="e#0#69#0" expanded="true" />
           </folding>
