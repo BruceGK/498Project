@@ -1,6 +1,8 @@
 import pandas as pd
 from collections import deque
 import csv
+import time
+import torch
 
 def convertABIDEStoLobster(log_file = 'ORDERBOOK_ABM_FULL', output_file='orderbook.csv'):
     df = pd.read_pickle(log_file)
@@ -14,7 +16,8 @@ def convertABIDEStoLobster(log_file = 'ORDERBOOK_ABM_FULL', output_file='orderbo
             elif row[j] < 0:
                 best_buys.append((j, abs(row[j])))
         if len(best_sells) >= 10 and len(best_buys) >= 10:
-            order_book_history.append((sorted(best_sells, reverse=False)[:10], sorted(best_buys, reverse=True)[:10]))
+            timestamp = time.mktime(index.timetuple())
+            order_book_history.append((timestamp, sorted(best_sells, reverse=False)[:10], sorted(best_buys, reverse=True)[:10]))
         best_sells = deque()
         best_buys = deque()
     
@@ -24,9 +27,12 @@ def convertABIDEStoLobster(log_file = 'ORDERBOOK_ABM_FULL', output_file='orderbo
             row = []
             sells = order_book_history[i][0]
             buys = order_book_history[i][1]
+            row.append(order_book_history[i][0])
             for k in range(10):
                 row.append(sells[k][0])
                 row.append(sells[k][1])
                 row.append(buys[k][0])
                 row.append(buys[k][1])
             OBwriter.writerow(row)
+    OB = pd.read_csv(output_file, header = None)
+    return torch.tensor(OB.values)
