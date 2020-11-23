@@ -52,15 +52,13 @@ def abides_to_tensor(log_file = 'ORDERBOOK_ABM_FULL', output_file='orderbook.csv
             continue
         else:
             order_book = []
-            # TODO make sure time format
+
             timestamp = time.mktime(timestamp.timetuple())
             # Populate order book
             order_book.append(timestamp)
-            for t in buys[-10:].abs().items():
-                order_book.extend(t)
-            for t in sells[:10].items():
-                order_book.extend(t)
-
+            for sell, buy in zip(sells[:10].items(), buys[:-11:-1].abs().items()):
+                order_book.extend(sell)
+                order_book.extend(buy)
             order_book_history.append(order_book)
             # t = torch.tensor(order_book)
 
