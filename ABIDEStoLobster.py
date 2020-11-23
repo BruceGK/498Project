@@ -36,3 +36,32 @@ def convertABIDEStoLobster(log_file = 'ORDERBOOK_ABM_FULL', output_file='orderbo
             OBwriter.writerow(row)
     OB = pd.read_csv(output_file, header = None)
     return torch.tensor(OB.values)
+
+def abides_to_tensor(log_file = 'ORDERBOOK_ABM_FULL', output_file='orderbook.csv'):
+    # Read log file
+    df = pd.read_pickle(log_file)
+
+    order_book_history = []
+    for timestamp, row in df.iterrows():
+        # Filter out empty entries
+        row = row[row != 0]
+        buys = row[row < 0]
+        sells = row[row > 0]
+        # Check for partial order book and skip
+        if len(buys) < 10 or len(sells) < 10:
+            continue
+        else:
+            order_book = []
+            # TODO make sure time format
+            timestamp = time.mktime(timestamp.timetuple())
+            # Populate order book
+            order_book.append(timestamp)
+            for t in buys[-10:].abs().items():
+                order_book.extend(t)
+            for t in sells[:10].items():
+                order_book.extend(t)
+
+            order_book_history.append(order_book)
+            # t = torch.tensor(order_book)
+
+abides_to_tensor('ORDERBOOK_ABM_FULL.bz2')
