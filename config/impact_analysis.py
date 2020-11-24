@@ -151,7 +151,8 @@ symbols = { args.ticker : { 'r_bar' : 100000, 'kappa' : 0.05, 'sigma_s' : sigma_
 
 ### Configure the Kernel.
 kernal_seed = np.random.randint(low=0,high=2**16)
-kernels = [Kernel("Base Kernel", random_state = np.random.RandomState(seed=kernal_seed))] * 2
+kernels = [Kernel("Base Kernel", random_state = np.random.RandomState(seed=kernal_seed)),
+           Kernel("Base Kernel", random_state = np.random.RandomState(seed=kernal_seed))]
 
 
 
@@ -173,7 +174,7 @@ mkt_close = midnight + pd.to_timedelta('09:30:00.000001')
 
 # Configure an appropriate oracle for all traded stocks.
 # All agents requiring the same type of Oracle will use the same oracle instance.
-oracle = MeanRevertingOracle(mkt_open, mkt_close, symbols)
+oracles = [MeanRevertingOracle(mkt_open, mkt_close, symbols)] * 2
 
 
 # Create the exchange.
@@ -205,8 +206,8 @@ s = symbols[symbol]
 #hbl = []
 
 # 28 agents
-#zi = [ (4, 0, 250, 1), (4, 0, 500, 1), (4, 0, 1000, 0.8), (4, 0, 1000, 1), (4, 0, 2000, 0.8), (4, 250, 500, 0.8), (4, 250, 500, 1) ]
-#hbl = []
+# zi = [ (4, 0, 250, 1), (4, 0, 500, 1), (4, 0, 1000, 0.8), (4, 0, 1000, 1), (4, 0, 2000, 0.8), (4, 250, 500, 0.8), (4, 250, 500, 1) ]
+# hbl = []
 
 # 65 agents
 #zi = [ (10, 0, 250, 1), (10, 0, 500, 1), (9, 0, 1000, 0.8), (9, 0, 1000, 1), (9, 0, 2000, 0.8), (9, 250, 500, 0.8), (9, 250, 500, 1) ]
@@ -247,18 +248,18 @@ s = symbols[symbol]
 # hbl = [ (2, 250, 500, 1, 2), (2, 250, 500, 1, 3), (2, 250, 500, 1, 5), (2, 250, 500, 1, 8) ]
 
 # 65 agents
-#zi = [ (7, 0, 250, 1), (7, 0, 500, 1), (7, 0, 1000, 0.8), (7, 0, 1000, 1), (7, 0, 2000, 0.8), (7, 250, 500, 0.8), (7, 250, 500, 1) ]
-#hbl = [ (4, 250, 500, 1, 2), (4, 250, 500, 1, 3), (4, 250, 500, 1, 5), (4, 250, 500, 1, 8) ] 
+# zi = [ (7, 0, 250, 1), (7, 0, 500, 1), (7, 0, 1000, 0.8), (7, 0, 1000, 1), (7, 0, 2000, 0.8), (7, 250, 500, 0.8), (7, 250, 500, 1) ]
+# hbl = [ (4, 250, 500, 1, 2), (4, 250, 500, 1, 3), (4, 250, 500, 1, 5), (4, 250, 500, 1, 8) ]
 
 # 1000 agents
-# zi = [ (100, 0, 250, 1), (100, 0, 500, 1), (100, 0, 1000, 0.8), (100, 0, 1000, 1), (100, 0, 2000, 0.8), (100, 250, 500, 0.8), (100, 250, 500, 1) ]
-# hbl = [ (75, 250, 500, 1, 2), (75, 250, 500, 1, 3), (75, 250, 500, 1, 5), (75, 250, 500, 1, 8) ]
+zi = [ (100, 0, 250, 1), (100, 0, 500, 1), (100, 0, 1000, 0.8), (100, 0, 1000, 1), (100, 0, 2000, 0.8), (100, 250, 500, 0.8), (100, 250, 500, 1) ]
+hbl = [ (75, 250, 500, 1, 2), (75, 250, 500, 1, 3), (75, 250, 500, 1, 5), (75, 250, 500, 1, 8) ]
 
 
 
 # ZI strategy split.
 for i,x in enumerate(zi):
-    strat_name = "Type {} [{} <= R <= {}, eta={}]".format(i+1, x[1], x[2], x[3])
+    strat_name = "Type {} [{} - R - {}, eta={}]".format(i+1, x[1], x[2], x[3])
     for lst in agents:
         lst.extend([ ZeroIntelligenceAgent(j, "ZI Agent {} {}".format(j, strat_name), "ZeroIntelligenceAgent {}".format(strat_name), random_state = np.random.RandomState(seed=np.random.randint(low=0,high=2**16)),log_orders=log_orders, symbol=symbol, starting_cash=starting_cash, sigma_n=sigma_n, r_bar=s['r_bar'], kappa=s['kappa'], sigma_s=s['sigma_s'], q_max=10, sigma_pv=5000000, R_min=x[1], R_max=x[2], eta=x[3], lambda_a=0.005) for j in range(agent_count,agent_count+x[0]) ])
     for lst in agent_types:
@@ -267,11 +268,11 @@ for i,x in enumerate(zi):
 
 # HBL strategy split.
 for i,x in enumerate(hbl):
-    strat_name = "Type {} [{} <= R <= {}, eta={}, L={}]".format(i+1, x[1], x[2], x[3], x[4])
+    strat_name = "Type {} [{} - R - {}, eta={}, L={}]".format(i+1, x[1], x[2], x[3], x[4])
     for lst in agents:
-        agents.extend([ HeuristicBeliefLearningAgent(j, "HBL Agent {} {}".format(j, strat_name), "HeuristicBeliefLearningAgent {}".format(strat_name), random_state = np.random.RandomState(seed=np.random.randint(low=0,high=2**16)), log_orders=log_orders, symbol=symbol, starting_cash=starting_cash, sigma_n=sigma_n, r_bar=s['r_bar'], kappa=s['kappa'], sigma_s=s['sigma_s'], q_max=10, sigma_pv=5000000, R_min=x[1], R_max=x[2], eta=x[3], lambda_a=0.005, L=x[4]) for j in range(agent_count,agent_count+x[0]) ])
+        lst.extend([ HeuristicBeliefLearningAgent(j, "HBL Agent {} {}".format(j, strat_name), "HeuristicBeliefLearningAgent {}".format(strat_name), random_state = np.random.RandomState(seed=np.random.randint(low=0,high=2**16)), log_orders=log_orders, symbol=symbol, starting_cash=starting_cash, sigma_n=sigma_n, r_bar=s['r_bar'], kappa=s['kappa'], sigma_s=s['sigma_s'], q_max=10, sigma_pv=5000000, R_min=x[1], R_max=x[2], eta=x[3], lambda_a=0.005, L=x[4]) for j in range(agent_count,agent_count+x[0]) ])
     for lst in agent_types:
-        agent_types.extend([ "HeuristicBeliefLearningAgent {}".format(strat_name) for j in range(x[0]) ])
+        lst.extend([ "HeuristicBeliefLearningAgent {}".format(strat_name) for j in range(x[0]) ])
     agent_count += x[0]
 
 
@@ -282,7 +283,7 @@ for i,x in enumerate(hbl):
 impact_time = midnight + pd.to_timedelta('09:30:00.0000002')
 
 i = agent_count
-agents[0].append(ImpactAgent(i, "Impact Agent {}".format(i), "ImpactAgent", symbol = "IBM", starting_cash = starting_cash, greed = greed, impact = impact, impact_time = impact_time, random_state = np.random.RandomState(seed=np.random.randint(low=0,high=2**32))))
+agents[0].append(ImpactAgent(i, "Impact Agent {}".format(i), "ImpactAgent", symbol = "IBM", starting_cash = starting_cash, greed = greed, impact = impact, impact_time = impact_time, random_state = np.random.RandomState(seed=np.random.randint(low=0,high=2**16))))
 agent_types[0].append("Impact Agent {}".format(i))
 agent_count += 1
 
@@ -292,7 +293,7 @@ agent_count += 1
 
 # Square numpy array with dimensions equal to total agent count.  In this config,
 # there should not be any communication delay.
-latency = np.zeros((len(agent_types),len(agent_types)))
+latencies = [np.zeros((len(agent_types[0]),len(agent_types[0]))), np.zeros((len(agent_types[1]),len(agent_types[1])))]
 
 # Configure a simple latency noise model for the agents.
 # Index is ns extra delay, value is probability of this delay being applied.
@@ -302,18 +303,24 @@ noise = [ 1.0 ]
 
 
 # Start the kernel running.
-runner_args = {'agents': agents[0], 'startTime': kernelStartTime,
-              'stopTime': kernelStopTime, 'agentLatency': latency,
-              'latencyNoise': noise,
-              'defaultComputationDelay': defaultComputationDelay,
-              'oracle': oracle, 'log_dir': log_dir}
-p = mp.Process(target=kernels[0].runner, kwargs=runner_args)
-p.start()
-print('impact process start')
-kernels[1].runner(agents = agents[1], startTime = kernelStartTime,
-              stopTime = kernelStopTime, agentLatency = latency,
+# runner_args = {'agents': agents[0], 'startTime': kernelStartTime,
+#               'stopTime': kernelStopTime, 'agentLatency': latencies[0],
+#               'latencyNoise': noise,
+#               'defaultComputationDelay': defaultComputationDelay,
+#               'oracle': oracles[0], 'log_dir': log_dir}
+# p = mp.Process(target=kernels[0].runner, kwargs=runner_args)
+# p.start()
+
+print('--- Impact Simulation')
+kernels[0].runner(agents = agents[0], startTime = kernelStartTime,
+              stopTime = kernelStopTime, agentLatency = latencies[0],
               latencyNoise = noise,
               defaultComputationDelay = defaultComputationDelay,
-              oracle = oracle, log_dir = 'no_'+log_dir)
-print('non impact process start')
-p.join()
+              oracle = oracles[0], log_dir = log_dir)
+print('--- Non-Impact Simulation')
+kernels[1].runner(agents = agents[1], startTime = kernelStartTime,
+              stopTime = kernelStopTime, agentLatency = latencies[1],
+              latencyNoise = noise,
+              defaultComputationDelay = defaultComputationDelay,
+              oracle = oracles[1], log_dir = 'no_'+log_dir)
+# p.join()
