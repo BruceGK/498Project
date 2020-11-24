@@ -3,6 +3,7 @@ from collections import deque
 import csv
 import time
 import torch
+from tqdm import tqdm
 
 def convertABIDEStoLobster(log_file = 'ORDERBOOK_ABM_FULL', output_file='orderbook.csv'):
     df = pd.read_pickle(log_file)
@@ -42,7 +43,10 @@ def abides_to_tensor(log_file = 'ORDERBOOK_ABM_FULL', output_file='orderbook.csv
     df = pd.read_pickle(log_file)
 
     order_book_history = []
-    for timestamp, row in df.iterrows():
+    for timestamp, row in tqdm(df.iterrows(), total=len(df)):
+        # Early stop
+        if len(order_book_history) >= 360000:
+            break
         # Filter out empty entries
         row = row[row != 0]
         buys = row[row < 0]
@@ -60,6 +64,8 @@ def abides_to_tensor(log_file = 'ORDERBOOK_ABM_FULL', output_file='orderbook.csv
                 order_book.extend(sell)
                 order_book.extend(buy)
             order_book_history.append(order_book)
-            # t = torch.tensor(order_book)
+    t = torch.tensor(order_book_history, dtype=torch.float64)
+    # t[:, 1::2] *= 1e-4  # change prices to dollar ammounts
+    torch.save(t, 'data/F/long_data/00000000')
 
-abides_to_tensor('ORDERBOOK_ABM_FULL.bz2')
+abides_to_tensor('../abides/log/rmsc03_two_hour/ORDERBOOK_F_FREQ_10L.bz2')
