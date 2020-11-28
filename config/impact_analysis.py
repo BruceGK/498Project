@@ -6,6 +6,7 @@ from agent.ZeroIntelligenceAgent import ZeroIntelligenceAgent
 from util.order import LimitOrder
 from util.oracle.MeanRevertingOracle import MeanRevertingOracle
 from util import util
+from detection.price_diff import PriceMeasure
 
 import numpy as np
 import pandas as pd
@@ -180,7 +181,18 @@ oracles = [MeanRevertingOracle(mkt_open, mkt_close, symbols)] * 2
 # Create the exchange.
 num_exchanges = 1
 for lst in agents:
-    lst.extend([ ExchangeAgent(j, "Exchange Agent {}".format(j), "ExchangeAgent", mkt_open, mkt_close, [s for s in symbols], log_orders=log_orders, book_freq=book_freq, pipeline_delay = 0, computation_delay = 0, stream_history = 10, random_state = np.random.RandomState(seed=np.random.randint(low=0,high=2**16)))
+    lst.extend([ ExchangeAgent(id=0,
+                               name="Exchange Agent {}".format(j),
+                               type="ExchangeAgent",
+                               mkt_open=mkt_open,
+                               mkt_close=mkt_close,
+                               symbols=[s for s in symbols],
+                               log_orders=log_orders,
+                               book_freq=book_freq,
+                               pipeline_delay = 0,
+                               computation_delay = 0,
+                               stream_history = 10,
+                               random_state = np.random.RandomState(seed=np.random.randint(low=0,high=2**16)))
                     for j in range(agent_count, agent_count + num_exchanges) ])
 for lst in agent_types:
     lst.extend(["ExchangeAgent" for j in range(num_exchanges)])
@@ -303,14 +315,6 @@ noise = [ 1.0 ]
 
 
 # Start the kernel running.
-# runner_args = {'agents': agents[0], 'startTime': kernelStartTime,
-#               'stopTime': kernelStopTime, 'agentLatency': latencies[0],
-#               'latencyNoise': noise,
-#               'defaultComputationDelay': defaultComputationDelay,
-#               'oracle': oracles[0], 'log_dir': log_dir}
-# p = mp.Process(target=kernels[0].runner, kwargs=runner_args)
-# p.start()
-
 print('--- Impact Simulation')
 kernels[0].runner(agents = agents[0], startTime = kernelStartTime,
               stopTime = kernelStopTime, agentLatency = latencies[0],
@@ -323,4 +327,13 @@ kernels[1].runner(agents = agents[1], startTime = kernelStartTime,
               latencyNoise = noise,
               defaultComputationDelay = defaultComputationDelay,
               oracle = oracles[1], log_dir = 'no_'+log_dir)
-# p.join()
+
+# processes = [f'python -u impact_analysis.py -c {args.config} -l {log_dir} {"-v" if args.verbose else ""}'
+#              for seed in global_seeds]
+#
+# pool = Pool(processes=num_parallel)
+# pool.map(os.system, processes)
+
+# Compare measurement
+measure = PriceMeasure(log_dir)
+result = measure.compare()
