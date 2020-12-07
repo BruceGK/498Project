@@ -1,17 +1,9 @@
-# The following import is from ABIDES simultaion and would be placed in the 
 from agent.TradingAgent import TradingAgent
 import pandas as pd
 import numpy as np
 
-'''
-Currently the trading agents don't take into account trading volume which is the main way spoofing attacks take place.
-So the goal of this is to use the buy volume and sell volume to determine if buy pressure is higher or if sell pressure is higher
-and then place a trade accordingly. 
 
-The AttackMomentumAgent will then place orders with the least amount of volume to flip the buy pressure/sell_pressure when it is somewhat close
-maybe .4/.6 as the upper bounds(we can play with this).
-'''
-class VulnerableMomentumAgent(TradingAgent):
+class MomentumAgent(TradingAgent):
     """
     Simple Trading Agent that compares the 20 past mid-price observations with the 50 past observations and places a
     buy limit order if the 20 mid-price average >= 50 mid-price average or a
@@ -52,25 +44,32 @@ class VulnerableMomentumAgent(TradingAgent):
         """ Momentum agent actions are determined after obtaining the best bid and ask in the LOB """
         super().receiveMessage(currentTime, msg)
         if not self.subscribe and self.state == 'AWAITING_SPREAD' and msg.body['msg'] == 'QUERY_SPREAD':
-            bid, bid_volume, ask, ask_volume = self.getKnownBidAsk(self.symbol)
-            self.placeOrders(bid, bid_volume, ask, ask_volume)
-            self.setWakeup(currentTime + self.getWakeFrequency())
-            self.state = 'AWAITING_WAKEUP'
+            bids, asks = self.getKnownBidAsk(self.symbol, best=False)
+            if bids and asks:
+                buyPercent = MomentumAgent.buyPressure(bids, asks)
+                askPercent = 1 - buyPercent
+                bid = bids[0][0]
+                ask = asks[0][0]
+                self.placeOrders(bid, ask, buyPercent, askPercent)
+                self.setWakeup(currentTime + self.getWakeFrequency())
+                self.state = 'AWAITING_WAKEUP'
         elif self.subscribe and self.state == 'AWAITING_MARKET_DATA' and msg.body['msg'] == 'MARKET_DATA':
             bids, asks = self.known_bids[self.symbol], self.known_asks[self.symbol]
             if bids and asks: self.placeOrders(bids[0][0], asks[0][0])
             self.state = 'AWAITING_MARKET_DATA'
 
-    def placeOrders(self, bid, ask):
+    def placeOrders(self, bid, ask, buyPercent, askPercent):
         """ Momentum Agent actions logic """
         if bid and ask:
             self.mid_list.append((bid + ask) / 2)
-            if len(self.mid_list) > 20: self.avg_20_list.append(VulnerableMomentumAgent.ma(self.mid_list, n=20)[-1].round(2))
-            if len(self.mid_list) > 50: self.avg_50_list.append(VulnerableMomentumAgent.ma(self.mid_list, n=50)[-1].round(2))
+            if len(self.mid_list) > 20: self.avg_20_list.append(MomentumAgent.ma(self.mid_list, n=20)[-1].round(2))
+            if len(self.mid_list) > 50: self.avg_50_list.append(MomentumAgent.ma(self.mid_list, n=50)[-1].round(2))
             if len(self.avg_20_list) > 0 and len(self.avg_50_list) > 0:
-                if self.avg_20_list[-1] >= self.avg_50_list[-1]:
+                #If the averages of the last 20 are bigger than the averages of the last 50 we buy because the momentum is still upwards
+                if self.avg_20_list[-1] >= self.avg_50_list[-1] and buyPercent > .5:
                     self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=True, limit_price=ask)
-                else:
+                #If the average of the last 20 are smaller than the averages of the last 50 we sell
+                elif self.avg_20_list[-1] < self.avg_50_list[-1] and buyPercent < .5:
                     self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=False, limit_price=bid)
 
     def getWakeFrequency(self):
@@ -81,3 +80,15 @@ class VulnerableMomentumAgent(TradingAgent):
         ret = np.cumsum(a, dtype=float)
         ret[n:] = ret[n:] - ret[:-n]
         return ret[n - 1:] / n
+
+    #Returns the percent of shares that are buy orders in the orderbook
+    @staticmethod
+    def buyPressure(bids, asks):
+        totalBidVol = 0
+        totalAskVol = 0
+        for b in bids:
+            totalBidVol += b[1]
+        for a in asks:
+            totalAskVol += a[1]
+        
+        return totalBidVol/(totalBidVol+totalAskVol)
