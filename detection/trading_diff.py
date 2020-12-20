@@ -10,9 +10,9 @@ from detection.measure import Measure
 class TradingMeasure(Measure):
     def __init__(self, log_dir):
         super().__init__(log_dir)
-        self.impact_dir = log_dir
-        self.no_impact_dir = f"no_{log_dir}"
-        self.impact_data, self.no_impact_data = self.load()
+        self.ask_dir = log_dir
+        self.bid_dir = f"no_{log_dir}"
+        self.ask, self.bid = self.load()
 
     def load(self):
         """
@@ -31,12 +31,12 @@ class TradingMeasure(Measure):
             Data loaded from impact and non-impact simulation
         """
         # Should only have one result, just a demonstration of how to find multiple files
-        impacts = sorted(glob(os.path.join(".", "log", self.impact_dir, "ExchangeAgent*.bz2")))
-        no_impacts = sorted(glob(os.path.join(".", "log", self.no_impact_dir, "ExchangeAgent*.bz2")))
-        for imp, no_imp in zip(impacts, no_impacts):
-            imp = pd.read_pickle(imp)
-            no_imp = pd.read_pickle(no_imp)
-        return imp, no_imp
+        asks = sorted(glob(os.path.join(".", "log", self.ask_dir, "ExchangeAgent*.bz2")))
+        bids = sorted(glob(os.path.join(".", "log", self.bid_dir, "ExchangeAgent*.bz2")))
+        for ask, bid in zip(asks, bids):
+            ask = pd.read_pickle(ask)
+            bid = pd.read_pickle(bid)
+        return ask, bid
 
 
     def compare(self) -> Any:
@@ -52,5 +52,5 @@ class TradingMeasure(Measure):
         NotImplementedError
             If not implemented by child class
         """
-        diff = self.impact_data - self.no_impact_data
+        diff = self.ask - self.bid
         return torch.tensor(diff.values)
