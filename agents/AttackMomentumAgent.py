@@ -1,9 +1,10 @@
+# The following import is from ABIDES simultaion and would be placed in the 
 from agent.TradingAgent import TradingAgent
 import pandas as pd
 import numpy as np
 
 
-class MomentumAgent(TradingAgent):
+class AttackMomentumAgent(TradingAgent):
     """
     Simple Trading Agent that compares the 20 past mid-price observations with the 50 past observations and places a
     buy limit order if the 20 mid-price average >= 50 mid-price average or a
@@ -46,33 +47,33 @@ class MomentumAgent(TradingAgent):
         if not self.subscribe and self.state == 'AWAITING_SPREAD' and msg.body['msg'] == 'QUERY_SPREAD':
             bids, asks = self.getKnownBidAsk(self.symbol, best=False)
             if bids and asks:
-                buyPercent = MomentumAgent.buyPressure(bids, asks)
+                buyPercent = AttackMomentumAgent.buyPressure(bids, asks)
                 askPercent = 1 - buyPercent
                 bid = bids[0][0]
                 ask = asks[0][0]
                 self.placeOrders(bid, ask, buyPercent, askPercent)
-                self.setWakeup(currentTime + self.getWakeFrequency())
-                self.state = 'AWAITING_WAKEUP'
+            self.setWakeup(currentTime + self.getWakeFrequency())
+            self.state = 'AWAITING_WAKEUP'
         elif self.subscribe and self.state == 'AWAITING_MARKET_DATA' and msg.body['msg'] == 'MARKET_DATA':
             bids, asks = self.known_bids[self.symbol], self.known_asks[self.symbol]
             if bids and asks: self.placeOrders(bids[0][0], asks[0][0])
             self.state = 'AWAITING_MARKET_DATA'
 
-    def placeOrders(self, bid, ask, buyPercent, askPercent):
+    def placeOrders(self, bid, ask, bidPercent, askPercent):
         """ Momentum Agent actions logic """
         if bid and ask:
             self.mid_list.append((bid + ask) / 2)
-            if len(self.mid_list) > 20: self.avg_20_list.append(MomentumAgent.ma(self.mid_list, n=20)[-1].round(2))
-            if len(self.mid_list) > 50: self.avg_50_list.append(MomentumAgent.ma(self.mid_list, n=50)[-1].round(2))
+            if len(self.mid_list) > 20: self.avg_20_list.append(AttackMomentumAgent.ma(self.mid_list, n=20)[-1].round(2))
+            if len(self.mid_list) > 50: self.avg_50_list.append(AttackMomentumAgent.ma(self.mid_list, n=50)[-1].round(2))
             if len(self.avg_20_list) > 0 and len(self.avg_50_list) > 0:
-                #If the averages of the last 20 are bigger than the averages of the last 50 we buy because the momentum is still upwards
                 if self.avg_20_list[-1] >= self.avg_50_list[-1]:
-                    if buyPercent < .6 and buyPercent > .5:
-                        self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=False, limit_price=ask)
-                #If the average of the last 20 are smaller than the averages of the last 50 we sell
-                elif self.avg_20_list[-1] < self.avg_50_list[-1]:
-                    if buyPercent < .5 and buyPercent > .4:
-                        self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=True, limit_price=bid)
+                    if bidPercent < .4 and askPercent > .6:
+                        self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=True, limit_price=ask)
+                        print("do we ever happen?2")
+                else:
+                    if bidPercent < .6 and askPercent > .4:
+                        print("Sell Spoof")
+                        self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=False, limit_price=bid)
 
     def getWakeFrequency(self):
         return pd.Timedelta(self.wake_up_freq)
@@ -83,7 +84,6 @@ class MomentumAgent(TradingAgent):
         ret[n:] = ret[n:] - ret[:-n]
         return ret[n - 1:] / n
 
-    #Returns the percent of shares that are buy orders in the orderbook
     @staticmethod
     def buyPressure(bids, asks):
         totalBidVol = 0

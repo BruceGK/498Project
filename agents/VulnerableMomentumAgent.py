@@ -66,13 +66,11 @@ class MomentumAgent(TradingAgent):
             if len(self.mid_list) > 50: self.avg_50_list.append(MomentumAgent.ma(self.mid_list, n=50)[-1].round(2))
             if len(self.avg_20_list) > 0 and len(self.avg_50_list) > 0:
                 #If the averages of the last 20 are bigger than the averages of the last 50 we buy because the momentum is still upwards
-                if self.avg_20_list[-1] >= self.avg_50_list[-1]:
-                    if buyPercent < .6 and buyPercent > .5:
-                        self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=False, limit_price=ask)
+                if self.avg_20_list[-1] >= self.avg_50_list[-1] and buyPercent > .5:
+                    self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=True, limit_price=ask)
                 #If the average of the last 20 are smaller than the averages of the last 50 we sell
-                elif self.avg_20_list[-1] < self.avg_50_list[-1]:
-                    if buyPercent < .5 and buyPercent > .4:
-                        self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=True, limit_price=bid)
+                elif self.avg_20_list[-1] < self.avg_50_list[-1] and buyPercent < .5:
+                    self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=False, limit_price=bid)
 
     def getWakeFrequency(self):
         return pd.Timedelta(self.wake_up_freq)
