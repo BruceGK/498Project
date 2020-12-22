@@ -12,7 +12,7 @@ class MomentumAgent(TradingAgent):
 
     def __init__(self, id, name, type, symbol, starting_cash,
                  min_size, max_size, wake_up_freq='60s',
-                 subscribe=False, log_orders=False, random_state=None):
+                 subscribe=True, log_orders=False, random_state=None):
 
         super().__init__(id, name, type, starting_cash=starting_cash, log_orders=log_orders, random_state=random_state)
         self.symbol = symbol
@@ -25,6 +25,8 @@ class MomentumAgent(TradingAgent):
         self.mid_list, self.avg_20_list, self.avg_50_list = [], [], []
         self.log_orders = log_orders
         self.state = "AWAITING_WAKEUP"
+        self.buyOrders = 0
+        self.sellOrders = 0
 
     def kernelStarting(self, startTime):
         super().kernelStarting(startTime)
@@ -33,7 +35,7 @@ class MomentumAgent(TradingAgent):
         """ Agent wakeup is determined by self.wake_up_freq """
         can_trade = super().wakeup(currentTime)
         if self.subscribe and not self.subscription_requested:
-            super().requestDataSubscription(self.symbol, levels=1, freq=10e9)
+            super().requestDataSubscription(self.symbol, levels=10, freq=10e9)
             self.subscription_requested = True
             self.state = 'AWAITING_MARKET_DATA'
         elif can_trade and not self.subscribe:
@@ -54,11 +56,16 @@ class MomentumAgent(TradingAgent):
                 self.setWakeup(currentTime + self.getWakeFrequency())
                 self.state = 'AWAITING_WAKEUP'
         elif self.subscribe and self.state == 'AWAITING_MARKET_DATA' and msg.body['msg'] == 'MARKET_DATA':
-            bids, asks = self.known_bids[self.symbol], self.known_asks[self.symbol]
-            if bids and asks: self.placeOrders(bids[0][0], asks[0][0])
+            bids, asks = self.getKnownBidAsk(self.symbol, best=False)
+            if bids and asks:
+                buyPercent = MomentumAgent.buyPressure(bids, asks)
+                askPercent = 1 - buyPercent
+                bid = bids[0][0]
+                ask = asks[0][0]
+                self.placeOrders(bid, ask, buyPercent, askPercent)
             self.state = 'AWAITING_MARKET_DATA'
 
-    def placeOrders(self, bid, ask, buyPercent, askPercent):
+    def placeOrders(self, bid, ask, bidPercent, askPercent):
         """ Momentum Agent actions logic """
         if bid and ask:
             self.mid_list.append((bid + ask) / 2)
@@ -66,12 +73,17 @@ class MomentumAgent(TradingAgent):
             if len(self.mid_list) > 50: self.avg_50_list.append(MomentumAgent.ma(self.mid_list, n=50)[-1].round(2))
             if len(self.avg_20_list) > 0 and len(self.avg_50_list) > 0:
                 #If the averages of the last 20 are bigger than the averages of the last 50 we buy because the momentum is still upwards
-                if self.avg_20_list[-1] >= self.avg_50_list[-1] and buyPercent > .5:
-                    self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=True, limit_price=ask)
+                if self.avg_20_list[-1] >= self.avg_50_list[-1]:
+                    if bidPercent > .5:
+                        self.buyOrders += 1
+                        # print("B" + str(self.buyOrders))
+                        self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=True, limit_price=ask)
                 #If the average of the last 20 are smaller than the averages of the last 50 we sell
-                elif self.avg_20_list[-1] < self.avg_50_list[-1] and buyPercent < .5:
-                    self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=False, limit_price=bid)
-
+                elif self.avg_20_list[-1] < self.avg_50_list[-1]:
+                    if askPercent > .5:
+                        self.sellOrders += 1
+                        # print("S" + str(self.sellOrders))
+                        self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=False, limit_price=bid)
     def getWakeFrequency(self):
         return pd.Timedelta(self.wake_up_freq)
 
