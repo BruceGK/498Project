@@ -29,8 +29,8 @@ class TradingMeasure(Measure):
             Data loaded from impact and non-impact simulation
         """
         # Should only have one result, just a demonstration of how to find multiple files
-        asks = sorted(glob(os.path.join(".", "log", self.ask_dir, "fundamental_*.bz2*.bz2")))
-        bids = sorted(glob(os.path.join(".", "log", self.bid_dir, "fundamental_*.bz2*.bz2")))
+        asks = sorted(glob(os.path.join(".", "log", self.ask_dir, "ORDERBOOK_ABM_FULL.bz2*.bz2")))
+        bids = sorted(glob(os.path.join(".", "log", self.bid_dir, "ORDERBOOK_ABM_FULL.bz2*.bz2")))
         for ask, bid in zip(asks, bids):
             ask = pd.read_pickle(ask)
             bid = pd.read_pickle(bid)

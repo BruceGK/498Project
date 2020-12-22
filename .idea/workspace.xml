@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="233b4340-4603-4815-a69e-2fad44333cd8" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/optimal_flow.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/optimal_flow.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,8 +17,11 @@
       <file leaf-file-name="price_diff.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/detection/price_diff.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" selection-start-line="5" selection-end-line="5" selection-end-column="18" />
+            <state relative-caret-position="403">
+              <caret line="28" column="12" selection-start-line="28" selection-start-column="12" selection-end-line="28" selection-end-column="12" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -26,8 +29,8 @@
       <file leaf-file-name="measure.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/detection/measure.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="19" lean-forward="true" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="26" />
+            <state relative-caret-position="450">
+              <caret line="30" column="11" selection-start-line="30" selection-start-column="11" selection-end-line="30" selection-end-column="11" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -38,8 +41,8 @@
       <file leaf-file-name="trading_diff.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/detection/trading_diff.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="32" column="93" lean-forward="true" selection-start-line="31" selection-start-column="17" selection-end-line="32" selection-end-column="93" />
+            <state relative-caret-position="555">
+              <caret line="37" selection-start-line="37" selection-end-line="37" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -47,11 +50,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="optimal_flow.ipynb" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/optimal_flow.ipynb">
-          <provider selected="true" editor-type-id="ipnb-editor">
-            <state>
-              <selected id="10" />
+      <file leaf-file-name="FundamentalTrackingAgent.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/agents/FundamentalTrackingAgent.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="433">
+              <caret line="39" column="82" selection-start-line="39" selection-start-column="16" selection-end-line="39" selection-end-column="82" />
+              <folding>
+                <element signature="e#0#43#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -87,11 +93,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rmsc03.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="rmsc03.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/agents/rmsc03.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4275">
-              <caret line="313" selection-start-line="313" selection-end-line="313" />
+            <state relative-caret-position="-4929">
+              <caret line="45" column="25" selection-start-line="45" selection-start-column="25" selection-end-line="45" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -113,8 +119,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="8" />
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="y" value="25" />
     <option name="width" value="1680" />
     <option name="height" value="1025" />
@@ -130,6 +135,11 @@
             <path>
               <item name="498Project" type="b2602c69:ProjectViewProjectNode" />
               <item name="498Project" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="498Project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="498Project" type="462c0819:PsiDirectoryNode" />
+              <item name="abides" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="498Project" type="b2602c69:ProjectViewProjectNode" />
@@ -182,8 +192,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="8" y="25" width="1680" height="1025" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -255,13 +264,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/detection/price_diff.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" selection-start-line="5" selection-end-line="5" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/detection/measure.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -493,13 +495,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agents/rmsc03.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4275">
-          <caret line="313" selection-start-line="313" selection-end-line="313" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/agents/AttackMomentumAgent.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -516,6 +511,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/optimal_flow.ipynb">
+      <provider selected="true" editor-type-id="ipnb-editor">
+        <state>
+          <selected id="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/detection/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -527,8 +529,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/detection/measure.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="19" lean-forward="true" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="26" />
+        <state relative-caret-position="450">
+          <caret line="30" column="11" selection-start-line="30" selection-start-column="11" selection-end-line="30" selection-end-column="11" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
@@ -537,25 +539,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/detection/price_diff.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" selection-start-line="5" selection-end-line="5" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/detection/trading_diff.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="32" column="93" lean-forward="true" selection-start-line="31" selection-start-column="17" selection-end-line="32" selection-end-column="93" />
+        <state relative-caret-position="403">
+          <caret line="28" column="12" selection-start-line="28" selection-start-column="12" selection-end-line="28" selection-end-column="12" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/optimal_flow.ipynb">
-      <provider selected="true" editor-type-id="ipnb-editor">
-        <state>
-          <selected id="10" />
+    <entry file="file://$PROJECT_DIR$/agents/FundamentalTrackingAgent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="433">
+          <caret line="39" column="82" selection-start-line="39" selection-start-column="16" selection-end-line="39" selection-end-column="82" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detection/trading_diff.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="37" selection-start-line="37" selection-end-line="37" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agents/rmsc03.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4929">
+          <caret line="45" column="25" selection-start-line="45" selection-start-column="25" selection-end-line="45" selection-end-column="25" />
         </state>
       </provider>
     </entry>
