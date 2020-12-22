@@ -5,6 +5,7 @@
 # - 25    Momentum Agents
 # - 5000  Noise Agents
 # - 1     (Optional) POV Execution agent
+# python -u abides.py -c rmsc03 -t ABM -d 20200603 -s 1234 -l rmsc03_two_hour
 
 import argparse
 import numpy as np
