@@ -3,6 +3,7 @@ from typing import Any
 import os
 import pandas as pd
 import torch
+import numpy as np
 
 from detection.measure import Measure
 
@@ -10,11 +11,8 @@ from detection.measure import Measure
 class PriceMeasure(Measure):
     def __init__(self, log_dir):
         super().__init__(log_dir)
-        self.impact_dir = log_dir
-        self.no_impact_dir = f"no_{log_dir}"
-        self.impact_data, self.no_impact_data = self.load()
 
-    def load(self):
+    def load(self, log_dir):
         """
         Load the data from `self.impact_dir` and `self.no_impact_dir` and
         initialize `self.impact_data` and `self.no_impact_data` .
@@ -31,11 +29,11 @@ class PriceMeasure(Measure):
             Data loaded from impact and non-impact simulation
         """
         # Should only have one result, just a demonstration of how to find multiple files
-        impacts = sorted(glob(os.path.join(".", "log", self.impact_dir, "ExchangeAgent*.bz2")))
-        no_impacts = sorted(glob(os.path.join(".", "log", self.no_impact_dir, "ExchangeAgent*.bz2")))
+        impacts = sorted(glob(os.path.join(".", log_dir, "impact", "fundamental_*.bz2")))
+        no_impacts = sorted(glob(os.path.join(".", log_dir, "no_impact", "fundamental_*.bz2")))
         for imp, no_imp in zip(impacts, no_impacts):
-            imp = pd.read_pickle(imp)
-            no_imp = pd.read_pickle(no_imp)
+            imp = pd.read_pickle(imp).to_numpy()
+            no_imp = pd.read_pickle(no_imp).to_numpy()
         return imp, no_imp
 
 
@@ -52,5 +50,6 @@ class PriceMeasure(Measure):
         NotImplementedError
             If not implemented by child class
         """
-        diff = self.impact_data - self.no_impact_data
-        return torch.tensor(diff.values)
+        diff = np.abs(self.impact_data - self.no_impact_data)
+        diff = diff.sum()
+        return torch.tensor(diff)
