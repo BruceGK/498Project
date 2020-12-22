@@ -61,8 +61,8 @@ class AttackMomentumAgent(TradingAgent):
             if bids and asks:
                 buyPercent = AttackMomentumAgent.buyPressure(bids, asks)
                 askPercent = 1 - buyPercent
-                bid = bids[0][0]
-                ask = asks[0][0]
+                bid = bids[-1][0]
+                ask = asks[-1][0]
                 self.placeOrders(bid, ask, buyPercent, askPercent)
             self.state = 'AWAITING_MARKET_DATA'
 
