@@ -8,6 +8,9 @@
 # python -u abides.py -c rmsc03 -t ABM -d 20200603 -s 1234 -l rmsc03_two_hour
 
 import argparse
+import copy
+import os
+
 import numpy as np
 import pandas as pd
 import sys
@@ -15,6 +18,8 @@ import datetime as dt
 from dateutil.parser import parse
 
 from Kernel import Kernel
+from agents.FundamentalTrackingAgent import FundamentalTrackingAgent
+from detection import PriceMeasure
 from util import util
 from util.order import LimitOrder
 from util.oracle.SparseMeanRevertingOracle import SparseMeanRevertingOracle
@@ -24,12 +29,13 @@ from agent.NoiseAgent import NoiseAgent
 from agent.ValueAgent import ValueAgent
 from agent.market_makers.AdaptiveMarketMakerAgent import AdaptiveMarketMakerAgent
 from agent.examples.MomentumAgent import MomentumAgent
-from agent.examples.AttackMomentumAgent import AttackMomentumAgent
+from agents.AttackMomentumAgent import AttackMomentumAgent
 from agent.execution.POVExecutionAgent import POVExecutionAgent
 from model.LatencyModel import LatencyModel
 
 ########################################################################################################################
 ############################################### GENERAL CONFIG #########################################################
+from utility import now
 
 parser = argparse.ArgumentParser(description='Detailed options for RMSC03 config.')
 
@@ -41,6 +47,10 @@ parser.add_argument('-t',
                     '--ticker',
                     required=True,
                     help='Ticker (symbol) to use for simulation')
+parser.add_argument('-m',
+                    '--method',
+                    default='price',
+                    help='Detection method')
 parser.add_argument('-d', '--historical-date',
                     required=True,
                     type=parse,
@@ -157,6 +167,7 @@ agent_count, agents, agent_types = 0, [], []
 # Hyperparameters
 symbol = args.ticker
 starting_cash = 10000000  # Cash in this simulator is always in CENTS.
+num_base = 10
 
 r_bar = 1e5
 sigma_n = r_bar / 10
@@ -197,8 +208,15 @@ agents.extend([ExchangeAgent(id=0,
 agent_types.extend("ExchangeAgent")
 agent_count += 1
 
+if args.method == 'price':
+    agents.extend([FundamentalTrackingAgent(agent_count, "Fundamental Tracking Agent {}".format(agent_count),
+                                     "FundamentalTrackingAgent",
+                                     log_frequency='10ms', symbol=args.ticker, log_orders=log_orders)])
+    agent_types.extend("FundamentalTrackingAgent")
+    agent_count += 1
+
 # 2) Noise Agents
-num_noise = 5000
+num_noise = 50*num_base
 noise_mkt_open = historical_date + pd.to_timedelta("09:00:00")  # These times needed for distribution of arrival times
                                                                 # of Noise Agents
 noise_mkt_close = historical_date + pd.to_timedelta("16:00:00")
@@ -215,7 +233,7 @@ agent_count += num_noise
 agent_types.extend(['NoiseAgent'])
 
 # 3) Value Agents
-num_value = 100
+num_value = num_base
 agents.extend([ValueAgent(id=j,
                           name="Value Agent {}".format(j),
                           type="ValueAgent",
@@ -274,7 +292,7 @@ agent_types.extend('POVMarketMakerAgent')
 
 
 # 5) Momentum Agents
-num_momentum_agents = 10
+num_momentum_agents = num_base
 
 agents.extend([MomentumAgent(id=j,
                              name="MOMENTUM_AGENT_{}".format(j),
@@ -291,23 +309,6 @@ agents.extend([MomentumAgent(id=j,
 agent_count += num_momentum_agents
 agent_types.extend("MomentumAgent")
 
-# 5b) Attack Momentum Agents
-num_momentum_agents = 10
-
-agents.extend([AttackMomentumAgent(id=j,
-                             name="ATTACK_MOMENTUM_AGENT_{}".format(j),
-                             type="AttackMomentumAgent",
-                             symbol=symbol,
-                             starting_cash=starting_cash*100,
-                             min_size=1,
-                             max_size=1000,
-                             wake_up_freq='20s',
-                             log_orders=log_orders,
-                             random_state=np.random.RandomState(seed=np.random.randint(low=0, high=2 ** 32,
-                                                                                       dtype='uint64')))
-               for j in range(agent_count, agent_count + num_momentum_agents)])
-agent_count += num_momentum_agents
-agent_types.extend("AttackMomentumAgent")
 
 # 6) Execution Agent
 
@@ -345,6 +346,25 @@ agent_types.extend("ExecutionAgent")
 agent_count += 1
 
 
+# 7) Attack Momentum Agents
+num_momentum_agents = num_base
+
+agents.extend([AttackMomentumAgent(id=j,
+                             name="ATTACK_MOMENTUM_AGENT_{}".format(j),
+                             type="AttackMomentumAgent",
+                             symbol=symbol,
+                             starting_cash=starting_cash*100,
+                             min_size=1,
+                             max_size=1000,
+                             wake_up_freq='20s',
+                             log_orders=log_orders,
+                             random_state=np.random.RandomState(seed=np.random.randint(low=0, high=2 ** 32,
+                                                                                       dtype='uint64')))
+               for j in range(agent_count, agent_count + num_momentum_agents)])
+agent_count += num_momentum_agents
+agent_types.extend("AttackMomentumAgent")
+
+
 ########################################################################################################################
 ########################################### KERNEL AND OTHER CONFIG ####################################################
 
@@ -358,7 +378,7 @@ defaultComputationDelay = 50  # 50 nanoseconds
 
 # LATENCY
 
-latency_rstate = np.random.RandomState(seed=np.random.randint(low=0, high=2**32))
+latency_rstate = np.random.RandomState(seed=np.random.randint(low=0, high=2**16))
 pairwise = (agent_count, agent_count)
 
 # All agents sit on line from Seattle to NYC
@@ -376,17 +396,36 @@ latency_model = LatencyModel(latency_model='deterministic',
                              random_state=latency_rstate,
                              kwargs=model_args
                              )
-# KERNEL
+# Running Experiments
+log_dir = args.log_dir + dt.datetime.now().strftime('%m%dT%H%M%S')
+os.mkdir(os.path.join('log', log_dir))
+no_impact_agents = copy.deepcopy(agents[:-1*num_base])
 
+print("Running impact")
 kernel.runner(agents=agents,
               startTime=kernelStartTime,
               stopTime=kernelStopTime,
               agentLatencyModel=latency_model,
               defaultComputationDelay=defaultComputationDelay,
               oracle=oracle,
-              log_dir=args.log_dir)
+              log_dir=os.path.join(log_dir, 'impact'))
+
+simulation_end_time = dt.datetime.now()
+print("Simulation End Time: {}".format(simulation_end_time))
+
+print("Running no impact")
+kernel.runner(agents=no_impact_agents,
+              startTime=kernelStartTime,
+              stopTime=kernelStopTime,
+              agentLatencyModel=latency_model,
+              defaultComputationDelay=defaultComputationDelay,
+              oracle=oracle,
+              log_dir=os.path.join(log_dir, 'no_impact'))
 
 
 simulation_end_time = dt.datetime.now()
 print("Simulation End Time: {}".format(simulation_end_time))
 print("Time taken to run simulation: {}".format(simulation_end_time - simulation_start_time))
+
+measure = PriceMeasure(log_dir)
+result = measure.compare()

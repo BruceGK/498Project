@@ -3,6 +3,7 @@ import os
 from Kernel import Kernel
 from agent.ExchangeAgent import ExchangeAgent
 from agent.HeuristicBeliefLearningAgent import HeuristicBeliefLearningAgent
+from agent.ValueAgent import ValueAgent
 from agent.examples.ImpactAgent import ImpactAgent
 from agent.ZeroIntelligenceAgent import ZeroIntelligenceAgent
 from util.order import LimitOrder
@@ -186,9 +187,9 @@ agent_types = [[], []]
 mkt_open = midnight + pd.to_timedelta('09:30:00')
 
 # And close it at 9:30:00.000001 (i.e. 1,000 nanoseconds or "time steps")
-mkt_close = midnight + pd.to_timedelta('09:30:00.000001')
+# mkt_close = midnight + pd.to_timedelta('09:30:00.000001')
 # mkt_close = midnight + pd.to_timedelta('09:30:00.00036')
-# mkt_close = midnight + pd.to_timedelta('16:00:00')
+mkt_close = midnight + pd.to_timedelta('16:00:00')
 
 # Configure an appropriate oracle for all traded stocks.
 # All agents requiring the same type of Oracle will use the same oracle instance.
@@ -222,6 +223,12 @@ starting_cash = 10000000
 # Here are the zero intelligence agents.
 symbol = args.ticker
 s = symbols[symbol]
+
+# Hyper Parameters
+r_bar = 1e5
+sigma_n = r_bar / 10
+kappa = 1.67e-15
+lambda_a = 7e-11
 
 # Tuples are: (# agents, R_min, R_max, eta, L).  L for HBL only.
 
@@ -269,12 +276,17 @@ s = symbols[symbol]
 
 # Some configs that mix both types of agents.
 
-# 28 agents
-zi = [(3, 0, 250, 1), (3, 0, 500, 1), (3, 0, 1000, 0.8), (3, 0, 1000, 1), (3, 0, 2000, 0.8), (3, 250, 500, 0.8),
-      (2, 250, 500, 1)]
-hbl = [(2, 250, 500, 1, 2), (2, 250, 500, 1, 3), (2, 250, 500, 1, 5), (2, 250, 500, 1, 8)]
-ma = [(2, 0, 500), (2, 0, 1000), (2, 0, 2000), (2, 500, 1000)]
+zi = [(3, 0, 250, 1)]
+hbl = [(2, 250, 500, 1, 2)]
+ma = [(2, 0, 500)]
 attacker = [(2, 500, 1000)]
+
+# 28 agents
+# zi = [(3, 0, 250, 1), (3, 0, 500, 1), (3, 0, 1000, 0.8), (3, 0, 1000, 1), (3, 0, 2000, 0.8), (3, 250, 500, 0.8),
+#       (2, 250, 500, 1)]
+# hbl = [(2, 250, 500, 1, 2), (2, 250, 500, 1, 3), (2, 250, 500, 1, 5), (2, 250, 500, 1, 8)]
+# ma = [(2, 0, 500), (2, 0, 1000), (2, 0, 2000), (2, 500, 1000)]
+# attacker = [(2, 500, 1000)]
 
 # 65 agents
 # zi = [ (7, 0, 250, 1), (7, 0, 500, 1), (7, 0, 1000, 0.8), (7, 0, 1000, 1), (7, 0, 2000, 0.8), (7, 250, 500, 0.8), (7, 250, 500, 1) ]
@@ -284,6 +296,26 @@ attacker = [(2, 500, 1000)]
 # zi = [(100, 0, 250, 1), (100, 0, 500, 1), (100, 0, 1000, 0.8), (100, 0, 1000, 1), (100, 0, 2000, 0.8),
 #       (100, 250, 500, 0.8), (100, 250, 500, 1)]
 # hbl = [(75, 250, 500, 1, 2), (75, 250, 500, 1, 3), (75, 250, 500, 1, 5), (75, 250, 500, 1, 8)]
+
+num_value = 5
+for lst in agents:
+    lst.extend([ValueAgent(id=j,
+                           name="Value Agent {}".format(j),
+                           type="ValueAgent",
+                           symbol=symbol,
+                           starting_cash=starting_cash,
+                           sigma_n=sigma_n,
+                           r_bar=r_bar,
+                           kappa=kappa,
+                           lambda_a=lambda_a,
+                           log_orders=log_orders,
+                           random_state=np.random.RandomState(
+                               seed=np.random.randint(low=0, high=2 ** 32, dtype='uint64')))
+                for j in range(agent_count, agent_count + num_value)])
+for lst in agent_types:
+    lst.extend(['ValueAgent' for j in range(agent_count, agent_count + num_value)])
+agent_count += num_value
+
 
 # ZI strategy split.
 for i, x in enumerate(zi):
@@ -348,12 +380,13 @@ if args.method == 'price':
 for i, x in enumerate(attacker):
     strat_name = "Type {} [{} - R - {}]".format(i + 1, x[1], x[2])
     agents[0].extend([AttackMomentumAgent(j, "Attack Momentum Agent {} {}".format(j, strat_name),
-                                    "AttackMomentumAgent {}".format(strat_name),
-                                    min_size=x[1], max_size=x[2],
-                                    random_state=np.random.RandomState(seed=np.random.randint(low=0, high=2 ** 16)),
-                                    log_orders=log_orders,
-                                    symbol=symbol, starting_cash=starting_cash)
-                for j in range(agent_count, agent_count + x[0])])
+                                          "AttackMomentumAgent {}".format(strat_name),
+                                          min_size=x[1], max_size=x[2],
+                                          random_state=np.random.RandomState(
+                                              seed=np.random.randint(low=0, high=2 ** 16)),
+                                          log_orders=log_orders,
+                                          symbol=symbol, starting_cash=starting_cash)
+                      for j in range(agent_count, agent_count + x[0])])
     agent_types[0].extend(["AttackMomentumAgent {}".format(strat_name) for j in range(x[0])])
     agent_count += x[0]
 # # Impact agent.
@@ -384,13 +417,13 @@ noise = [1.0]
 # Start the kernel running.
 print('--- Impact Simulation')
 kernels[0].runner(agents=agents[0], startTime=kernelStartTime,
-                  stopTime=kernelStopTime, agentLatency=latencies[0],
+                  stopTime=kernelStopTime, defaultLatency=5,
                   latencyNoise=noise,
                   defaultComputationDelay=defaultComputationDelay,
                   oracle=oracles[0], log_dir=log_dirs[0])
 print('--- Non-Impact Simulation')
 kernels[1].runner(agents=agents[1], startTime=kernelStartTime,
-                  stopTime=kernelStopTime, agentLatency=latencies[1],
+                  stopTime=kernelStopTime, defaultLatency=5,
                   latencyNoise=noise,
                   defaultComputationDelay=defaultComputationDelay,
                   oracle=oracles[1], log_dir=log_dirs[1])
