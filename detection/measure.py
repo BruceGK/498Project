@@ -3,10 +3,11 @@ from typing import Any
 
 
 class Measure:
-    def __init__(self, log_dir):
+    def __init__(self, log_dir, impact, no_impact):
+        self.fundamental = None
         self.log_dir = log_dir
-        # self.impact_dir = os.path.join(log_dir, 'impact')
-        # self.no_impact_dir = os.path.join('no_impact')
+        self.impact_dir = impact
+        self.no_impact_dir = no_impact
         self.impact_data, self.no_impact_data = self.load(log_dir)
 
     def load(self, log_dir):
