@@ -7,7 +7,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/detection/trading_diff.py" beforeDir="false" afterPath="$PROJECT_DIR$/detection/trading_diff.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,8 +22,8 @@
       <file leaf-file-name="price_diff.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/detection/price_diff.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="520">
-              <caret line="71" column="106" lean-forward="true" selection-start-line="71" selection-start-column="8" selection-end-line="71" selection-end-column="106" />
+            <state relative-caret-position="705">
+              <caret line="44" column="14" lean-forward="true" selection-start-line="14" selection-end-line="44" selection-end-column="14" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -54,11 +54,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="trading_diff.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="trading_diff.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/detection/trading_diff.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="545">
-              <caret line="42" column="94" selection-start-line="42" selection-start-column="84" selection-end-line="42" selection-end-column="94" />
+            <state relative-caret-position="817">
+              <caret line="91" column="27" selection-start-line="91" selection-start-column="27" selection-end-line="91" selection-end-column="27" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -75,12 +75,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="827">
-                <caret line="56" column="19" lean-forward="true" selection-start-line="56" selection-start-column="19" selection-end-line="56" selection-end-column="19" />
+              <first_editor relative-caret-position="883">
+                <caret line="61" column="301" selection-start-line="61" selection-start-column="301" selection-end-line="61" selection-end-column="301" />
               </first_editor>
               <second_editor />
             </state>
@@ -123,6 +123,7 @@
         <option value="$PROJECT_DIR$/detection/detection.py" />
         <option value="$PROJECT_DIR$/optimal_flow.ipynb" />
         <option value="$PROJECT_DIR$/detection/trading_diff.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -534,16 +535,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="827">
-            <caret line="56" column="19" lean-forward="true" selection-start-line="56" selection-start-column="19" selection-end-line="56" selection-end-column="19" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/abides/util/OrderBook.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="290">
@@ -557,6 +548,16 @@
           <caret line="37" column="69" selection-start-line="37" selection-start-column="55" selection-end-line="37" selection-end-column="69" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detection/price_diff.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="705">
+          <caret line="44" column="14" lean-forward="true" selection-start-line="14" selection-end-line="44" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -580,23 +581,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/detection/price_diff.py">
+    <entry file="file://$PROJECT_DIR$/detection/trading_diff.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="520">
-          <caret line="71" column="106" lean-forward="true" selection-start-line="71" selection-start-column="8" selection-end-line="71" selection-end-column="106" />
+        <state relative-caret-position="817">
+          <caret line="91" column="27" selection-start-line="91" selection-start-column="27" selection-end-line="91" selection-end-column="27" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/detection/trading_diff.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="545">
-          <caret line="42" column="94" selection-start-line="42" selection-start-column="84" selection-end-line="42" selection-end-column="94" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="883">
+            <caret line="61" column="301" selection-start-line="61" selection-start-column="301" selection-end-line="61" selection-end-column="301" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>

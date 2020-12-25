@@ -55,4 +55,9 @@ The attack agent follows a similar design pattern as the agent above, however, t
 
 
 ## Detection method
+###Price Compare
+
+###Trading Compare(Bid/Ask)
+
+In order to earn greater profits, traders all want to buy at the Bid price and then sell at the Ask price. As long as we cross-compare the absolute value of the Ask-Bid price of each transaction, we can find the fluctuation of the transaction. So as to discover which transactions are not making money
 
