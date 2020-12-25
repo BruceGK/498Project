@@ -93,8 +93,8 @@ python abides/util/plotting/liquidity_telemetry.py "log/rmsc03_two_hour_final/no
 ## Agents
 ### Files/Folders
 - `agents`
-    + `AttackMomentumAgent.py`: class `AttackMomentumAgent`
-    + `VulnerableMomentumAgent.py`: class `MomentumAgent` base edits 
+    + `AttackMomentumAgent.py`: class `AttackMomentumAgent` based of MomentumAgent.py in ABIDES
+    + `VulnerableMomentumAgent.py`: class `MomentumAgent` edits MomentumAgent.py in ABIDES
     + `FundamentalTrackingAgent.py`: Copied from ABIDES and fixed some bugs. Not used in the final experiment.
     + `TestVulnerableMomentumAgent.py`: unittests run by using `python TestVulnerableMomentumAgent.py`
     + `TestAttackMomentumAgent.py`: unittests run by using `python TestAttackMomentumAgent.py`
@@ -116,9 +116,16 @@ The attack agent follows a similar design pattern as the agent above, however, t
 
 ### Unit Tests
 
-The main tests were done on the PlaceOrders utility because this was modified from the base MomentumAgent class from Abides. Utilized mock to mock out the PlaceLimitOrders and verify calls were made in the correct scenarios. 
+#### BuyPressure
+
+Tests new metric added to incorporate volume into momentum based trading
+
+#### Sell Orders/Buy Orders
+
+Checks limit orders are placed in the right scenario and called with the right parameters depending on the bid, ask, and buy pressure.
 
 ## Detection method
+
 ### Files/Folders
 - `detection`
     + `measure.py`: class `Measure` takes a path to the log dir and two names of the sub-dir and provides two interface 
@@ -130,7 +137,7 @@ The main tests were done on the PlaceOrders utility because this was modified fr
     + `test_price_diff.py`: unit test for `price_diff.py`。
     + `trading_diff.py`: 
 
-###Trading Compare(Bid/Ask)
+### Trading Compare(Bid/Ask)
 
 In order to earn greater profits, traders all want to buy at the Bid price and then sell at the Ask price. As long as we cross-compare the absolute value of the Ask-Bid price of each transaction, we can find the fluctuation of the transaction. So as to discover which transactions are not making money
 
