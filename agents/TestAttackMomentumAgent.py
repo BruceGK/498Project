@@ -1,4 +1,4 @@
-from AttackMomentumAgent import AttackMomentumAgent
+from agents.AttackMomentumAgent import AttackMomentumAgent
 import numpy as np
 import mock
 import unittest
