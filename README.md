@@ -93,9 +93,11 @@ python abides/util/plotting/liquidity_telemetry.py "log/rmsc03_two_hour_final/no
 ## Agents
 ### Files/Folders
 - `agents`
-    + `AttackMomentumAgent.py`: class `AttackMomentumAgent` has parameter ...
-    + `VulnerableMomentumAgent.py`:
+    + `AttackMomentumAgent.py`: class `AttackMomentumAgent`
+    + `VulnerableMomentumAgent.py`: class `MomentumAgent` base edits 
     + `FundamentalTrackingAgent.py`: Copied from ABIDES and fixed some bugs. Not used in the final experiment.
+    + `TestVulnerableMomentumAgent.py`: unittests run by using `python TestVulnerableMomentumAgent.py`
+    + `TestAttackMomentumAgent.py`: unittests run by using `python TestAttackMomentumAgent.py`
 ### Vulnerable Momentum Agent
 
 ABIDES already used a momentum agent, however, this agent had a few problems that needed to be addressed. 
@@ -112,6 +114,9 @@ The attack agent's goal is to manipulate the market in such a way that it reacts
 
 The attack agent follows a similar design pattern as the agent above, however, the key difference is determining when to place attack orders. Using the same buy/sell pressure metric as above we were able to determine when the buy volume and sell volume were very close to 50%. Doing so enabled us to flood the market with fake orders such that the vulnerable momentum agents would be tricked into thinking the buy pressure is actually a sell pressure or vice versa. This way the attack agents were able to construct orders at critical moments to confuse the new momentum agents.
 
+### Unit Tests
+
+The main tests were done on the PlaceOrders utility because this was modified from the base MomentumAgent class from Abides. Utilized mock to mock out the PlaceLimitOrders and verify calls were made in the correct scenarios. 
 
 ## Detection method
 ### Files/Folders
