@@ -37,6 +37,8 @@ simulation environment.
 ### ABIDES: Towards High-Fidelity Market Simulation for AI Research
 *David Byrd, Maria Hybinette and Tucker Hybinette Balch*
 
+This research project helped develop a way to simulate market participants while being able to analyze each particpant in the market trade by trade. This creates a way to simulate market conditions while slightly manipulating the conditions of the market based on the participants and seeing the possible changes it has on the price direction. In addition, helps build a framework to build out unique market participants and see their impact. 
+
 
 ## Framework/Pipeline
 ### Files/Folders
