@@ -122,12 +122,18 @@ The attack agent follows a similar design pattern as the agent above, however, t
     + `price_diff.py`: class `PriceMeasure` extends `Measure` and loads the fundamental price, the exchange log and the 
     orderbook log; then construct mid-price using `extract_events_from_stream` in 
     `abides/util/formatting/convert_order_stream.py`, compute the absolute residual for each group and return the ratio.
+    + `test_price_diff.py`: unit test for `price_diff.py`。
     + `trading_diff.py`: 
 
 ###Trading Compare(Bid/Ask)
 
 In order to earn greater profits, traders all want to buy at the Bid price and then sell at the Ask price. As long as we cross-compare the absolute value of the Ask-Bid price of each transaction, we can find the fluctuation of the transaction. So as to discover which transactions are not making money
 
+### Unit Test
+#### PriceMeasure
+- Test `test_load_successful` loads `impact` and `no_impact` from `log/rmsc03_two_hour_final` and determine if `load()` 
+works properly by checking the length of the data. They should all be greater than zero and equal to each other.
+- Test `test_self_one` loads `impact` twice and compare the difference. The result should be 1 since it's the same data.
 
 ## Results
 ### Experiment Result
