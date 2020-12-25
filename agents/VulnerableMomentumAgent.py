@@ -103,4 +103,6 @@ class MomentumAgent(TradingAgent):
         for a in asks:
             totalAskVol += a[1]
         
+        if totalBidVol + totalAskVol == 0:
+            return None
         return totalBidVol/(totalBidVol+totalAskVol)

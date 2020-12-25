@@ -66,16 +66,14 @@ class AttackMomentumAgent(TradingAgent):
                 self.placeOrders(bid, ask, buyPercent, askPercent)
             self.state = 'AWAITING_MARKET_DATA'
 
-    def placeOrders(self, bid, ask, bidPercent, askPercent):
-        """ Momentum Agent actions logic """
+    def placeOrders(self, bid, ask, bidPercent):
+        """ Attack Momentum Agent actions logic """
 
-        if bidPercent < .45:
+        if bidPercent < .5 and bidPercent > .45:
                 self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=True, limit_price=ask)
                 self.buySpoofs += 1
-                #print("Buy Spoof")
-        if bidPercent > .55:
+        if bidPercent > .5 and bidPercent < .55:
                 self.sellSpoofs += 1
-                #print("Sell Spoof")
                 self.placeLimitOrder(self.symbol, quantity=self.size, is_buy_order=False, limit_price=bid)
 
     def getWakeFrequency(self):
@@ -95,5 +93,6 @@ class AttackMomentumAgent(TradingAgent):
             totalBidVol += b[1]
         for a in asks:
             totalAskVol += a[1]
-        
+        if totalBidVol + totalAskVol == 0:
+            return None
         return totalBidVol/(totalBidVol+totalAskVol)

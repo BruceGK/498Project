@@ -93,9 +93,11 @@ python abides/util/plotting/liquidity_telemetry.py "log/rmsc03_two_hour_final/no
 ## Agents
 ### Files/Folders
 - `agents`
-    + `AttackMomentumAgent.py`: class `AttackMomentumAgent` has parameter ...
-    + `VulnerableMomentumAgent.py`:
+    + `AttackMomentumAgent.py`: class `AttackMomentumAgent` based of MomentumAgent.py in ABIDES
+    + `VulnerableMomentumAgent.py`: class `MomentumAgent` edits MomentumAgent.py in ABIDES
     + `FundamentalTrackingAgent.py`: Copied from ABIDES and fixed some bugs. Not used in the final experiment.
+    + `TestVulnerableMomentumAgent.py`: unittests run by using `python TestVulnerableMomentumAgent.py`
+    + `TestAttackMomentumAgent.py`: unittests run by using `python TestAttackMomentumAgent.py`
 ### Vulnerable Momentum Agent
 
 ABIDES already used a momentum agent, however, this agent had a few problems that needed to be addressed. 
@@ -112,8 +114,18 @@ The attack agent's goal is to manipulate the market in such a way that it reacts
 
 The attack agent follows a similar design pattern as the agent above, however, the key difference is determining when to place attack orders. Using the same buy/sell pressure metric as above we were able to determine when the buy volume and sell volume were very close to 50%. Doing so enabled us to flood the market with fake orders such that the vulnerable momentum agents would be tricked into thinking the buy pressure is actually a sell pressure or vice versa. This way the attack agents were able to construct orders at critical moments to confuse the new momentum agents.
 
+### Unit Tests
+
+#### BuyPressure
+
+Tests new metric added to incorporate volume into momentum based trading
+
+#### Sell Orders/Buy Orders
+
+Checks limit orders are placed in the right scenario and called with the right parameters depending on the bid, ask, and buy pressure.
 
 ## Detection method
+
 ### Files/Folders
 - `detection`
     + `measure.py`: class `Measure` takes a path to the log dir and two names of the sub-dir and provides two interface 
@@ -129,6 +141,12 @@ The attack agent follows a similar design pattern as the agent above, however, t
     + `test_trading_diff.py`: unit test for `trading_diff.py`。
     + `trading_diff.py`: 
 
+<<<<<<< HEAD
+=======
+### Trading Compare(Bid/Ask)
+
+In order to earn greater profits, traders all want to buy at the Bid price and then sell at the Ask price. As long as we cross-compare the absolute value of the Ask-Bid price of each transaction, we can find the fluctuation of the transaction. So as to discover which transactions are not making money
+>>>>>>> 5e565fad5f98ae0dd6f742f03d6ad8ca29e1bb0c
 
 ### Unit Test
 #### PriceMeasure
