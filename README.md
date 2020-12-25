@@ -141,12 +141,9 @@ Checks limit orders are placed in the right scenario and called with the right p
     + `test_trading_diff.py`: unit test for `trading_diff.py`。
     + `trading_diff.py`: 
 
-<<<<<<< HEAD
-=======
 ### Trading Compare(Bid/Ask)
 
 In order to earn greater profits, traders all want to buy at the Bid price and then sell at the Ask price. As long as we cross-compare the absolute value of the Ask-Bid price of each transaction, we can find the fluctuation of the transaction. So as to discover which transactions are not making money
->>>>>>> 5e565fad5f98ae0dd6f742f03d6ad8ca29e1bb0c
 
 ### Unit Test
 #### PriceMeasure
