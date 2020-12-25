@@ -19,6 +19,7 @@ benefit. This result raises our interest to find a better attack to study other 
 
 ### Adversarial Attacks on Machine Learning Systems for High-Frequency Trading
 *Micah Goldblum, Avi Schwarzschild, Ankit B. Patel and Tom Goldstein*
+
 This research built Multi Layer Perceptron, Linear, and LSTM models as valuation models and their attack was aiming 
 to be a small perturbation on the order book. Also, they deployed two kinds of attack: One knowing the weights of 
 valuation models and the other without knowing  the  weights. They found that neural networks might be better at 
